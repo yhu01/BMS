@@ -1,4 +1,4 @@
-# Leveraging the Feature Distribution in Transfer-based Few-Shot Learning
+# Squeezing Backbone Feature Distributions to the Max for Efficient Few-Shot Learning
 
 This repository is the official implementation of [Squeezing Backbone Feature Distributions to the Max for Efficient Few-Shot Learning](https://arxiv.org/pdf/2110.09446.pdf).
 
@@ -18,7 +18,8 @@ You can download pretrained models and extracted features here:
 
 - [Extracted novel class features](https://drive.google.com/file/d/1dSKfO0mMz0KzObXIU930JFbhb7OK1qUU/view?usp=sharing) on miniImageNet, tieredImagenet, cub and cifar-fs . 
 
-- Untar the downloaded file and move it into 'checkpoint' folder.
+- create a 'checkpoint' folder 
+- Untar the downloaded file and move it into the 'checkpoint' folder.
 
 
 ## Boosted Min-size Sinkhorn
