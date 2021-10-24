@@ -18,7 +18,7 @@ You can download pretrained models and extracted features here:
 
 - [Extracted novel class features](https://drive.google.com/file/d/1dSKfO0mMz0KzObXIU930JFbhb7OK1qUU/view?usp=sharing) on miniImageNet, tieredImagenet, cub and cifar-fs . 
 
-- create a 'checkpoint' folder 
+- Create a 'checkpoint' folder 
 - Untar the downloaded file and move it into the 'checkpoint' folder.
 
 
