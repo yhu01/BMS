@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ## Pre-trained Models
 
-You can download pretrained models and extracted features here:
+You can download the extracted features here:
 
 - [Extracted novel class features](https://drive.google.com/file/d/1dSKfO0mMz0KzObXIU930JFbhb7OK1qUU/view?usp=sharing) on miniImageNet, tieredImagenet, cub and cifar-fs . 
 
