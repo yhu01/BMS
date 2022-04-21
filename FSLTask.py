@@ -2,17 +2,20 @@ import os
 import pickle
 import numpy as np
 import torch
+
 # from tqdm import tqdm
 
 # ========================================================
 #   Usefull paths
 _datasetFeaturesFiles = {
-                         "cub_wrn": "./checkpoint/cub/output.plk",
-                         "tiered_wrn": "./checkpoint/tieredImagenet/output.plk",
-                         "mini_wrn": "./checkpoint/miniImagenet/output.plk",
-                         "cifar-fs_wrn": "./checkpoint/cifar-fs/output.plk",
-                        }
-_cacheDir = "./cache"
+    "cub_wrn": os.path.join(".", "checkpoint", "cub", "output.plk"),
+    "tiered_wrn": os.path.join(".", "checkpoint", "tieredImagenet", "output.plk"),
+    "mini_wrn": os.path.join(".", "checkpoint", "miniImagenet", "output.plk"),
+    "cifar-fs_wrn": os.path.join(".", "checkpoint", "cifar-fs", "output.plk"),
+}
+
+# _cacheDir = "./cache"
+_cacheDir = os.path.join(".", "cache")
 _maxRuns = 10000
 _min_examples = -1
 
@@ -70,7 +73,7 @@ def loadDataSet(dsname):
     while labels.shape[0] > 0:
         indices = torch.where(dataset["labels"] == labels[0])[0]
         data = torch.cat([data, dataset["data"][indices, :]
-                          [:_min_examples].view(1, _min_examples, -1)], dim=0)
+        [:_min_examples].view(1, _min_examples, -1)], dim=0)
         indices = torch.where(labels != labels[0])[0]
         labels = labels[indices]
     print("Total of {:d} classes, {:d} elements each, with dimension {:d}\n".format(
@@ -80,19 +83,19 @@ def loadDataSet(dsname):
 def GenerateRun(iRun, cfg, regenRState=False, generate=True):
     global _randStates, data, _min_examples
     if not regenRState:
-        np.random.set_state(_randStates[iRun])
+        np.random.set_state(_randStates[-1])
 
     classes = np.random.permutation(np.arange(data.shape[0]))[:cfg["ways"]]
     shuffle_indices = np.arange(_min_examples)
     dataset = None
     if generate:
         dataset = torch.zeros(
-            (cfg['ways'], cfg['shot']+cfg['queries'], data.shape[2]))
+            (cfg['ways'], cfg['shot'] + cfg['queries'], data.shape[2]))
     for i in range(cfg['ways']):
         shuffle_indices = np.random.permutation(shuffle_indices)
         if generate:
             dataset[i] = data[classes[i], shuffle_indices,
-                              :][:cfg['shot']+cfg['queries']]
+                         :][:cfg['shot'] + cfg['queries']]
 
     return dataset
 
@@ -129,8 +132,8 @@ def setRandomStates(cfg):
 def GenerateRunSet(cfg=None):
     global dataset, _maxRuns
     if cfg is None:
-        cfg = {"shot": 1, "ways": 5, "queries": 15, "runs":_maxRuns}
-        
+        cfg = {"shot": 1, "ways": 5, "queries": 15, "runs": _maxRuns}
+
     start = 0
     end = cfg['runs']
 
@@ -138,8 +141,8 @@ def GenerateRunSet(cfg=None):
     print("generating task from {} to {}".format(start, end))
 
     dataset = torch.zeros(
-        (end-start, cfg['ways'], cfg['shot']+cfg['queries'], data.shape[2]))
-    for iRun in range(end-start):
+        (end - start, cfg['ways'], cfg['shot'] + cfg['queries'], data.shape[2]))
+    for iRun in range(end - start):
         dataset[iRun] = GenerateRun(iRun, cfg)
 
     return dataset
@@ -147,13 +150,12 @@ def GenerateRunSet(cfg=None):
 
 # define a main code to test this module
 if __name__ == "__main__":
-
     print("Testing Task loader for Few Shot Learning")
-    loadDataSet('miniimagenet')
+    loadDataSet('mini_wrn')
 
     cfg = {"shot": 1, "ways": 5, "queries": 15, "runs": 10}
     setRandomStates(cfg)
 
     run10 = GenerateRun(10, cfg)
     print("First call:", run10[:2, :2, :2])
-    print(ds.size())
+    # print(ds.size())
